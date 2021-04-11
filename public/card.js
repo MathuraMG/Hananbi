@@ -1,9 +1,10 @@
+// const { text } = require("express");
+
 /** GLOBAL CONFIG **/ 
 const CARDSIZE = {x:80, y:120};
+const GROUPS = ["red", "yellow", "blue", "green", "white"];
 
-function removeButtons() {
-    $('button').remove();
-}
+
 
 
 class Card {
@@ -37,7 +38,7 @@ class Card {
 
     playCard() {
         // debugger;
-        console.log(` ${this.shorthand() } card played`)
+        this.game.play(this, this.player);
     }
 
     discardCard() {
@@ -68,18 +69,67 @@ class Board {
     constructor() {
         this.deck = [];
         this.clueTokens = 8;
-        this.gameStack = {};
+        this.gameStack = [];
         this.discardPile = [];
+        GROUPS.forEach((group, index)=> {
+            this.gameStack[group] = [];
+        })
+        
     }
 
     addToDiscardPile(card) {
         this.discardPile.push(card);
     }
     
-    displayDiscardPile() {
+    displayDiscardPile(x,y) {
         this.discardPile.forEach((card, index)=> {
-            card.display()
+            fill(card.group);
+            text(card.number,x+index*10, y);
         })
+    }
+
+    displayGameBoard(x,y) {
+        GROUPS.forEach((group, index)=> {
+            fill(group);
+            rect(x+index*(CARDSIZE.x+30) , y, CARDSIZE.x, CARDSIZE.y);
+            // debugger;
+            if(this.gameStack[group].length > 0) {
+                fill(0);
+                let displayNumber = this.gameStack[group][this.gameStack[group].length-1];
+                text(displayNumber,x+index*(CARDSIZE.x+30) , y);
+            }
+        })
+    }
+
+    checkisValidCard(card) {
+        //check if stack already contains this number - INVALID
+        if(this.gameStack[card.group].includes(card.number))
+        {
+            return false;
+        } 
+        //check if stack contains the prev number - VALID
+        else if(this.gameStack[card.group].length>0 && this.gameStack[card.group].includes(card.number-1)) {
+            return true;
+        } 
+        //check if card is 1
+        else if(this.gameStack[card.group].length==0 && card.number==1) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    addToGameStack(card) {
+        this.gameStack[card.group].push(card.number);
+    }
+
+    playCard(card) {
+        if(this.checkisValidCard(card)) {
+            this.addToGameStack(card);
+        } else {
+            this.addToDiscardPile(card);
+        }
     }
 }
 
@@ -91,7 +141,7 @@ class Game {
     constructor(noPlayers) {
         this.noPlayers = noPlayers;
         this.numbers = [1,1,1,2,2,3,3,4,4,5];
-        this.groups = ["red", "green", "blue","yellow","white"]; 
+        this.groups = GROUPS;
         this.board = new Board();
         this.players = [];
     }
@@ -151,6 +201,18 @@ class Game {
         this.dealCard(player);
         this.log();
         this.display();
+        this.board.displayDiscardPile(window.innerWidth-100, window.innerHeight-100);
+        this.board.displayGameBoard(window.innerWidth/3, window.innerHeight/2);
+    }
+
+    play(card, player) {
+        player.removeCard(card);
+        this.board.playCard(card);
+        this.dealCard(player);
+        this.log();
+        this.display();
+        this.board.displayDiscardPile(window.innerWidth-100, window.innerHeight-100);
+        this.board.displayGameBoard(window.innerWidth/3, window.innerHeight/2);
     }
 }
 

@@ -15,8 +15,11 @@ function setup() {
     
     myGame.initCards();
     myGame.initPlayers();
-    background("peachpuff");
+    // myGame.board.initGameBoard();
+    // background("peachpuff");
+    
     myGame.display();
+    myGame.board.displayGameBoard(window.innerWidth/3 , window.innerHeight/2);
 }
 
 function draw() {
