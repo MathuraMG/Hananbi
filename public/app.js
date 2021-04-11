@@ -11,10 +11,16 @@ function preload() {
 }
 function setup() {
     createCanvas(window.innerWidth, window.innerHeight);
-    background("peach");
+   
     
     myGame.initCards();
     myGame.initPlayers();
+    background("peachpuff");
+    myGame.display();
+}
+
+function draw() {
+    
 }
 
 
