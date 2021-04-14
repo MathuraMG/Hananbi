@@ -3,7 +3,7 @@ class Game {
         this.noPlayers = noPlayers;
         this.numbers = [1,1,1,2,2,3,3,4,4,5];
         this.groups = GROUPS;
-        this.board = new Board();
+        this.board = new Board({ game: this });
         this.players = [];
     }
     initCards() {
@@ -30,6 +30,17 @@ class Game {
             board: this.board.state(),
             players: this.players.map((player) => player.state())
         }
+    }
+
+    setState(state) {
+        this.board.setState(state.board);
+        state.players.forEach(playerState => {
+            this.player(playerState.id).setState(playerState);
+        })
+    }
+
+    player(id) {
+        return this.players.find(player => player.id === id)
     }
 
     dealCard(player) {

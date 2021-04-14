@@ -5,11 +5,11 @@ const CARDSIZE = {x:80, y:120};
 const GROUPS = ["red", "yellow", "blue", "green", "white"];
 
 class Card {
-    constructor(number, group, id, game) {
+    constructor(number, group, id, game, player) {
         this.number = number;
         this.group = group;
         this.id = id;
-        this.player = null;
+        this.player = player || null;
         this.game = game;
     }
     

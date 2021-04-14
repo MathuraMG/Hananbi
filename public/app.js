@@ -7,9 +7,6 @@ socket.on('connect', () => {
 });
 
 socket.on('startGame', (data) => {
-    myGame = new Game(data.numPlayers);
-    myGame.initCards();
-    myGame.initPlayers();
     socket.emit('setGameState', {state: myGame.state()})
     myGame.display();
     myGame.board.displayGameBoard(window.innerWidth/3 , window.innerHeight/2);
@@ -17,9 +14,14 @@ socket.on('startGame', (data) => {
 
 socket.on('loadGame', (data) => {
     myGame.setState(data.state);
+    myGame.display();
+    myGame.board.displayGameBoard(window.innerWidth/3 , window.innerHeight/2);
 })
 
 function setup() {
+    myGame = new Game(3);
+    myGame.initCards();
+    myGame.initPlayers();
     createCanvas(window.innerWidth, window.innerHeight);
 }
 

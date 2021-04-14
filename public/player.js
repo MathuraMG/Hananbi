@@ -3,7 +3,7 @@ class Player {
         this.id = id;
         this.game = game;
         this.cards = [];
-        this.noCards = 5;    
+        this.noCards = 5; 
     }
 
     state() {
@@ -11,6 +11,19 @@ class Player {
             id: this.id,
             cards: this.cards.map((card)=> card.state())
         }
+    }
+
+    setState(state) {
+        this.id = state.id,
+        this.cards = state.cards.map(cardState => {
+            return new Card(
+                cardState.number,
+                cardState.group,
+                cardState.id,
+                this.game,
+                this
+            )
+        });
     }
 
     removeCard(card) {

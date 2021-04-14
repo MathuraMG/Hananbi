@@ -1,5 +1,5 @@
 class Board {
-    constructor() {
+    constructor(props) {
         this.deck = [];
         this.clueTokens = 8;
         this.gameStack = {};
@@ -8,6 +8,7 @@ class Board {
             this.gameStack[group] = [];
         })
         
+        this.game = props.game;
     }
 
     state() {
@@ -16,6 +17,19 @@ class Board {
             gameStack: this.gameStack,
             discardPile: this.discardPile
         }
+    }
+
+    setState(state) {
+        this.deck = state.deck.map(cardState => {
+            return new Card(
+                cardState.number,
+                cardState.group,
+                cardState.id,
+                this.game
+            )
+        });
+        this.gameStack = state.gameStack;
+        this.discardPile = state.discardPile;
     }
 
     addToDiscardPile(card) {
