@@ -16,6 +16,14 @@ class Card {
         this.game = game;
     }
     
+    state() {
+        return {
+            id: this.id,
+            number: this.number,
+            group: this.group
+        }
+    }
+
     display(x, y) {
         let playButton, discardButton;
         fill(this.group);
@@ -54,6 +62,13 @@ class Player {
         this.noCards = 5;    
     }
 
+    state() {
+        return {
+            id: this.id,
+            cards: this.cards.map((card)=> card.state())
+        }
+    }
+
     removeCard(card) {
         this.cards.splice(this.cards.findIndex((handCard) => handCard.id === card.id), 1);
     }
@@ -69,7 +84,7 @@ class Board {
     constructor() {
         this.deck = [];
         this.clueTokens = 8;
-        this.gameStack = [];
+        this.gameStack = {};
         this.discardPile = [];
         GROUPS.forEach((group, index)=> {
             this.gameStack[group] = [];
@@ -77,8 +92,16 @@ class Board {
         
     }
 
+    state() {
+        return {
+            deck: this.deck.map((card)=>card.state()),
+            gameStack: this.gameStack,
+            discardPile: this.discardPile
+        }
+    }
+
     addToDiscardPile(card) {
-        this.discardPile.push(card);
+        this.discardPile.push(card.state());
     }
     
     displayDiscardPile(x,y) {
@@ -102,22 +125,10 @@ class Board {
     }
 
     checkisValidCard(card) {
-        //check if stack already contains this number - INVALID
-        if(this.gameStack[card.group].includes(card.number))
-        {
-            return false;
-        } 
-        //check if stack contains the prev number - VALID
-        else if(this.gameStack[card.group].length>0 && this.gameStack[card.group].includes(card.number-1)) {
-            return true;
-        } 
-        //check if card is 1
-        else if(this.gameStack[card.group].length==0 && card.number==1) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        let group = this.gameStack[card.group];
+        let lastNumber = group[group.length - 1] || 0;
+
+        return lastNumber === card.number - 1;
     }
 
     addToGameStack(card) {
@@ -162,6 +173,13 @@ class Game {
         shuffle(deck, true);
         console.log(deck)
         this.board.deck= deck;
+    }
+
+    state() {
+        return {
+            board: this.board.state(),
+            players: this.players.map((player) => player.state())
+        }
     }
 
     dealCard(player) {
