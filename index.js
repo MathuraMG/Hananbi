@@ -12,6 +12,7 @@ server.listen(port, () => {
 
 let maxPlayers = 3;
 let players = [];
+let gameState = null;
 //Initialize socket.io
 let io = require('socket.io').listen(server);
 
@@ -23,12 +24,14 @@ io.sockets.on('connection', function(socket){
         io.to(socket.id).emit('startGame', { numPlayers: maxPlayers });
     } else if (players.length < maxPlayers) {
         players.push({id: socket.id})
+        io.to(socket.id).emit('loadGame', { state: gameState });
     } else {
         // game is full - TBD
     }
 
     socket.on('setGameState', function(data) {
-        io.to(socket.id).emit('justChecking', { data: data });
+        gameState = data.state;
+        // io.to(socket.id).emit('loadGame', { data: data });
     })
 
     //Listen for this client to disconnect

@@ -15,8 +15,8 @@ socket.on('startGame', (data) => {
     myGame.board.displayGameBoard(window.innerWidth/3 , window.innerHeight/2);
 })
 
-socket.on('justChecking', (data) => {
-    // debugger;
+socket.on('loadGame', (data) => {
+    myGame.setState(data.state);
 })
 
 function setup() {
