@@ -30,9 +30,9 @@ class Player {
         this.cards.splice(this.cards.findIndex((handCard) => handCard.id === card.id), 1);
     }
 
-    display(x, y, canReveal) {
+    display(x, y, hide) {
         for(let i=0;i<this.cards.length;i++) {
-            this.cards[i].display(x + i * (CARDSIZE.x +20), y, canReveal); 
+            this.cards[i].display(x + i * (CARDSIZE.x +20), y, hide);
         }
     }
 }

@@ -21,24 +21,24 @@ class Card {
         }
     }
 
-    display(x, y, canReveal) {
+    display(x, y, hide) {
         let playButton, discardButton;
-        if(canReveal) {
+        if(hide) {
+            fill("#aaaaaa");
+            rect(x, y, CARDSIZE.x, CARDSIZE.y);
+            playButton = createButton('Play');
+            discardButton = createButton('discard');
+            playButton.position(x, y + CARDSIZE.y+30);
+            discardButton.position(x, y + CARDSIZE.y+50);
+            playButton.mousePressed(() => this.playCard());
+            discardButton.mousePressed(() =>this.discardCard());
+        } else {
             fill(this.group);
             rect(x, y, CARDSIZE.x, CARDSIZE.y);
             fill(0);
             textSize(20);
             text(this.number, x+10, y+20);
-        } else {
-            fill("#aaaaaa");
-            rect(x, y, CARDSIZE.x, CARDSIZE.y);
         }
-        playButton = createButton('Play');
-        discardButton = createButton('discard');
-        playButton.position(x, y + CARDSIZE.y+30);
-        discardButton.position(x, y + CARDSIZE.y+50);
-        playButton.mousePressed(() => this.playCard());
-        discardButton.mousePressed(() =>this.discardCard());
 
     }
 

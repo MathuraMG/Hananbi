@@ -67,13 +67,13 @@ class Game {
         })
     }
 
-    display(player) {
+    display(props) {
         background("peachpuff");
         removeButtons();
         for(let i=0;i<this.noPlayers;i++) {
-            let canReveal = (i == player)? false : true ;
-            this.players[i].display(0, (CARDSIZE.y +50) * i,canReveal);
+            let hide = (i == props.player) ;
 
+            this.players[i].display(0, (CARDSIZE.y +50) * i,hide);
         }
     }
 
