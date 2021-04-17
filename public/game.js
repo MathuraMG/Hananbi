@@ -5,6 +5,7 @@ class Game {
         this.groups = GROUPS;
         this.board = new Board({ game: this });
         this.players = [];
+        // this.playerNumber = 0;
     }
     initCards() {
         //create a random shuffle of the starter cards
@@ -13,7 +14,7 @@ class Game {
         {
             for(let j=0;j<this.numbers.length;j++) {
                 deck.push(new Card(
-                    this.numbers[j], 
+                    this.numbers[j],
                     this.groups[i],
                     j*this.groups.length + i,
                     this
@@ -48,11 +49,11 @@ class Game {
         card.player = player;
         player.cards.push(card);
     }
- 
+
     initPlayers() {
         for(let i = 0;i<this.noPlayers;i++) {
            this.players.push(new Player(i, this));
-           
+
            for(let j=0;j<5;j++) {
                this.dealCard(this.players[i]);
            }
@@ -66,11 +67,13 @@ class Game {
         })
     }
 
-    display() {
+    display(player) {
         background("peachpuff");
         removeButtons();
         for(let i=0;i<this.noPlayers;i++) {
-            this.players[i].display(0, (CARDSIZE.y +50) * i);
+            let canReveal = (i == player)? false : true ;
+            this.players[i].display(0, (CARDSIZE.y +50) * i,canReveal);
+
         }
     }
 

@@ -1,6 +1,6 @@
 // const { text } = require("express");
 
-/** GLOBAL CONFIG **/ 
+/** GLOBAL CONFIG **/
 const CARDSIZE = {x:80, y:120};
 const GROUPS = ["red", "yellow", "blue", "green", "white"];
 
@@ -12,7 +12,7 @@ class Card {
         this.player = player || null;
         this.game = game;
     }
-    
+
     state() {
         return {
             id: this.id,
@@ -21,22 +21,27 @@ class Card {
         }
     }
 
-    display(x, y) {
+    display(x, y, canReveal) {
         let playButton, discardButton;
-        fill(this.group);
-        rect(x, y, CARDSIZE.x, CARDSIZE.y);
-        fill(0);
-        textSize(20);
-        text(this.number, x+10, y+20);
+        if(canReveal) {
+            fill(this.group);
+            rect(x, y, CARDSIZE.x, CARDSIZE.y);
+            fill(0);
+            textSize(20);
+            text(this.number, x+10, y+20);
+        } else {
+            fill("#aaaaaa");
+            rect(x, y, CARDSIZE.x, CARDSIZE.y);
+        }
         playButton = createButton('Play');
         discardButton = createButton('discard');
         playButton.position(x, y + CARDSIZE.y+30);
         discardButton.position(x, y + CARDSIZE.y+50);
         playButton.mousePressed(() => this.playCard());
         discardButton.mousePressed(() =>this.discardCard());
-        
+
     }
-    
+
     shorthand() {
         return this.number + this.group[0];
     }

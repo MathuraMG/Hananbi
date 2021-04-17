@@ -3,7 +3,7 @@ class Player {
         this.id = id;
         this.game = game;
         this.cards = [];
-        this.noCards = 5; 
+        this.noCards = 5;
     }
 
     state() {
@@ -30,9 +30,9 @@ class Player {
         this.cards.splice(this.cards.findIndex((handCard) => handCard.id === card.id), 1);
     }
 
-    display(x, y) {
+    display(x, y, canReveal) {
         for(let i=0;i<this.cards.length;i++) {
-            this.cards[i].display(x + i * (CARDSIZE.x +20), y); 
+            this.cards[i].display(x + i * (CARDSIZE.x +20), y, canReveal); 
         }
     }
 }

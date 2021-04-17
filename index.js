@@ -21,10 +21,16 @@ io.sockets.on('connection', function(socket){
 
     if (players.length === 0) {
         players.push({id: socket.id})
-        io.to(socket.id).emit('startGame', { numPlayers: maxPlayers });
+        io.to(socket.id).emit('startGame', {
+            numPlayers: maxPlayers,
+            player: 0
+        });
     } else if (players.length < maxPlayers) {
         players.push({id: socket.id})
-        io.to(socket.id).emit('loadGame', { state: gameState });
+        io.to(socket.id).emit('loadGame', {
+            state: gameState,
+            player: players.length - 1
+        });
     } else {
         // game is full - TBD
     }
@@ -38,6 +44,6 @@ io.sockets.on('connection', function(socket){
     socket.on('disconnect', function() {
         console.log("A client has disconnected: " + socket.id);
         players.splice(players.findIndex((player) => player.id ===socket.id), 1);
-    });    
+    });
 
 })
