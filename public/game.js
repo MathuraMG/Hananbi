@@ -73,7 +73,7 @@ class Game {
         for(let i=0;i<this.noPlayers;i++) {
             let hide = (i == props.player) ;
 
-            this.players[i].display(0, (CARDSIZE.y +50) * i,hide);
+            this.players[i].display({x:0, y:(CARDSIZE.y +50) * i,hide:hide});
         }
     }
 

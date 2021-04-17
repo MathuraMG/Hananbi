@@ -21,9 +21,11 @@ class Card {
         }
     }
 
-    display(x, y, hide) {
+    display(props) {
         let playButton, discardButton;
-        if(hide) {
+        let x = props.x;
+        let y = props.y;
+        if(props.hide) {
             fill("#aaaaaa");
             rect(x, y, CARDSIZE.x, CARDSIZE.y);
             playButton = createButton('Play');
