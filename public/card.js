@@ -23,6 +23,7 @@ class Card {
 
     display(props) {
         let playButton, discardButton;
+        let groupClueButton, numberClueButton;
         let x = props.x;
         let y = props.y;
         if(props.hide) {
@@ -40,6 +41,13 @@ class Card {
             fill(0);
             textSize(20);
             text(this.number, x+10, y+20);
+            fill(0);
+            numberClueButton = createButton(this.number);
+            groupClueButton = createButton(this.group);
+            numberClueButton.position(x, y + CARDSIZE.y+30);
+            groupClueButton.position(x, y + CARDSIZE.y+50);
+            numberClueButton.mousePressed(() => this.playCard());
+            groupClueButton.mousePressed(() =>this.discardCard());
         }
 
     }

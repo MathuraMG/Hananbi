@@ -5,7 +5,7 @@ class Game {
         this.groups = GROUPS;
         this.board = new Board({ game: this });
         this.players = [];
-        // this.playerNumber = 0;
+        this.clueTokens = 8;
     }
     initCards() {
         //create a random shuffle of the starter cards
