@@ -7,7 +7,7 @@ class Board {
         GROUPS.forEach((group, index)=> {
             this.gameStack[group] = [];
         })
-        
+
         this.game = props.game;
     }
 
@@ -35,7 +35,7 @@ class Board {
     addToDiscardPile(card) {
         this.discardPile.push(card.state());
     }
-    
+
     displayDiscardPile(x,y) {
         this.discardPile.forEach((card, index)=> {
             fill(card.group);

@@ -26,6 +26,7 @@ class Card {
         let groupClueButton, numberClueButton;
         let x = props.x;
         let y = props.y;
+        // console.log(props.hide)
         if(props.hide) {
             fill("#aaaaaa");
             rect(x, y, CARDSIZE.x, CARDSIZE.y);
@@ -46,12 +47,26 @@ class Card {
             groupClueButton = createButton(this.group);
             numberClueButton.position(x, y + CARDSIZE.y+30);
             groupClueButton.position(x, y + CARDSIZE.y+50);
-            numberClueButton.mousePressed(() => this.playCard());
-            groupClueButton.mousePressed(() =>this.discardCard());
+            numberClueButton.mousePressed(() => this.numberClue(this.number));
+            groupClueButton.mousePressed(() =>this.groupClue(this.group));
+            if(this.game.clueTokens <= 0) {
+                numberClueButton.attribute('disabled', 'disabled');
+                groupClueButton.attribute('disabled', 'disabled');
+            }
         }
 
     }
 
+    numberClue() {
+        this.game.clueTokens -= 1;
+        this.game.display({currentPlayer});
+        console.log(this.game.clueTokens);
+    }
+    groupClue() {
+        this.game.clueTokens -= 1;
+        this.game.display({currentPlayer});
+        console.log(this.game.clueTokens);
+    }
     shorthand() {
         return this.number + this.group[0];
     }
@@ -62,6 +77,8 @@ class Card {
     }
 
     discardCard() {
+        this.game.clueTokens = min(this.game.clueTokens+1, this.game.maxClueTokens);
+        console.log(this.game.clueTokens);
         this.game.discard(this, this.player);
     }
 }

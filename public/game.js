@@ -6,6 +6,7 @@ class Game {
         this.board = new Board({ game: this });
         this.players = [];
         this.clueTokens = 8;
+        this.maxClueTokens = 8;
     }
     initCards() {
         //create a random shuffle of the starter cards
@@ -70,9 +71,9 @@ class Game {
     display(props) {
         background("peachpuff");
         removeButtons();
+        this.board.displayGameBoard(window.innerWidth/3 , window.innerHeight/2);
         for(let i=0;i<this.noPlayers;i++) {
-            let hide = (i == props.player) ;
-
+            let hide = (i == props.currentPlayer) ;
             this.players[i].display({x:0, y:(CARDSIZE.y +50) * i,hide:hide});
         }
     }
@@ -82,9 +83,9 @@ class Game {
         this.board.addToDiscardPile(card);
         this.dealCard(player);
         this.log();
-        this.display();
+        this.display({currentPlayer});
         this.board.displayDiscardPile(window.innerWidth-100, window.innerHeight-100);
-        this.board.displayGameBoard(window.innerWidth/3, window.innerHeight/2);
+
     }
 
     play(card, player) {
@@ -92,8 +93,8 @@ class Game {
         this.board.playCard(card);
         this.dealCard(player);
         this.log();
-        this.display();
+        this.display({currentPlayer});
         this.board.displayDiscardPile(window.innerWidth-100, window.innerHeight-100);
-        this.board.displayGameBoard(window.innerWidth/3, window.innerHeight/2);
+
     }
 }
