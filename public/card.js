@@ -29,7 +29,24 @@ class Card {
         let x = props.x;
         let y = props.y;
 
+        this.displayClue(props);
         props.hide ? this.displayHiddenCards(props) : this.displayRevealedCards(props);
+    }
+
+    displayClue(props) {
+      let clueSize = 20;
+      let x = props.x;
+      let y = props.y - clueSize;
+
+      let fillColor = this.groupRevealed ? this.group : "#aaaaaa";
+      fill(fillColor);
+      rect(x, y, CARDSIZE.x, clueSize);
+
+      if (this.numberRevealed) {
+        fill(0);
+        textSize(20);
+        text(this.number, x, y + clueSize);
+      }
     }
 
     displayHiddenCards(props) {
@@ -71,14 +88,10 @@ class Card {
     }
 
     numberClue() {
-        this.game.clueTokens -= 1;
-        this.game.display({currentPlayer});
-        console.log(this.game.clueTokens);
+        this.game.numberClue(this);
     }
     groupClue() {
-        this.game.clueTokens -= 1;
-        this.game.display({currentPlayer});
-        console.log(this.game.clueTokens);
+        this.game.groupClue(this);
     }
     shorthand() {
         return this.number + this.group[0];

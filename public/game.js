@@ -51,6 +51,30 @@ class Game {
         player.cards.push(card);
     }
 
+    numberClue(card) {
+      let player = card.player;
+      let number = card.number
+      player.cards.forEach((card) => {
+        if (card.number == number) {
+          card.numberRevealed = true;
+        }
+      })
+      this.clueTokens -= 1;
+      this.display({currentPlayer});
+    }
+
+    groupClue(card) {
+      let player = card.player;
+      let group = card.group
+      player.cards.forEach((card) => {
+        if (card.group == group) {
+          card.groupRevealed = true;
+        }
+      })
+      this.clueTokens -= 1;
+      this.display({currentPlayer});
+    }
+
     initPlayers() {
         for(let i = 0;i<this.noPlayers;i++) {
            this.players.push(new Player(i, this));
@@ -71,11 +95,18 @@ class Game {
     display(props) {
         background("peachpuff");
         removeButtons();
+        this.displayClues();
         this.board.displayGameBoard(window.innerWidth/3 , window.innerHeight/2);
         for(let i=0;i<this.noPlayers;i++) {
             let hide = (i == props.currentPlayer) ;
             this.players[i].display({ x: 0, y:(CARDSIZE.y) * i * 2 + CARDSIZE.y/2, hide: hide });
         }
+    }
+
+    displayClues() {
+      fill(0);
+      textSize(20);
+      text(`Clues: ${this.clueTokens}`, 0, 20);
     }
 
     discard(card, player) {
