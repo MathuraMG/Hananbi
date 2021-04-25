@@ -29,11 +29,10 @@ class Card {
         let x = props.x;
         let y = props.y;
 
-        props.hide ? displayHiddenCards(props) : displayRevealedCards(props);
-        }
+        props.hide ? this.displayHiddenCards(props) : this.displayRevealedCards(props);
     }
 
-    displayRevealedCards(props) {
+    displayHiddenCards(props) {
         let playButton, discardButton;
         let x = props.x;
         let y = props.y;
@@ -48,7 +47,7 @@ class Card {
         discardButton.mousePressed(() =>this.discardCard());
     }
 
-    displayHiddenCards(props) {
+    displayRevealedCards(props) {
         let groupClueButton, numberClueButton;
         let x = props.x;
         let y = props.y;
