@@ -9,6 +9,8 @@ class Card {
         this.number = number;
         this.group = group;
         this.id = id;
+        this.numberRevealed = false;
+        this.groupRevealed = false;
         this.player = player || null;
         this.game = game;
     }
@@ -26,35 +28,47 @@ class Card {
         let groupClueButton, numberClueButton;
         let x = props.x;
         let y = props.y;
-        // console.log(props.hide)
-        if(props.hide) {
-            fill("#aaaaaa");
-            rect(x, y, CARDSIZE.x, CARDSIZE.y);
-            playButton = createButton('Play');
-            discardButton = createButton('discard');
-            playButton.position(x, y + CARDSIZE.y+30);
-            discardButton.position(x, y + CARDSIZE.y+50);
-            playButton.mousePressed(() => this.playCard());
-            discardButton.mousePressed(() =>this.discardCard());
-        } else {
-            fill(this.group);
-            rect(x, y, CARDSIZE.x, CARDSIZE.y);
-            fill(0);
-            textSize(20);
-            text(this.number, x+10, y+20);
-            fill(0);
-            numberClueButton = createButton(this.number);
-            groupClueButton = createButton(this.group);
-            numberClueButton.position(x, y + CARDSIZE.y+30);
-            groupClueButton.position(x, y + CARDSIZE.y+50);
-            numberClueButton.mousePressed(() => this.numberClue(this.number));
-            groupClueButton.mousePressed(() =>this.groupClue(this.group));
-            if(this.game.clueTokens <= 0) {
-                numberClueButton.attribute('disabled', 'disabled');
-                groupClueButton.attribute('disabled', 'disabled');
-            }
-        }
 
+        props.hide ? displayHiddenCards(props) : displayRevealedCards(props);
+        }
+    }
+
+    displayRevealedCards(props) {
+        let playButton, discardButton;
+        let x = props.x;
+        let y = props.y;
+
+        fill("#aaaaaa");
+        rect(x, y, CARDSIZE.x, CARDSIZE.y);
+        playButton = createButton('Play');
+        discardButton = createButton('discard');
+        playButton.position(x, y + CARDSIZE.y+30);
+        discardButton.position(x, y + CARDSIZE.y+50);
+        playButton.mousePressed(() => this.playCard());
+        discardButton.mousePressed(() =>this.discardCard());
+    }
+
+    displayHiddenCards(props) {
+        let groupClueButton, numberClueButton;
+        let x = props.x;
+        let y = props.y;
+
+        fill(this.group);
+        rect(x, y, CARDSIZE.x, CARDSIZE.y);
+        fill(0);
+        textSize(20);
+        text(this.number, x+10, y+20);
+        fill(0);
+        numberClueButton = createButton(this.number);
+        groupClueButton = createButton(this.group);
+        numberClueButton.position(x, y + CARDSIZE.y+30);
+        groupClueButton.position(x, y + CARDSIZE.y+50);
+        numberClueButton.mousePressed(() => this.numberClue(this.number));
+        groupClueButton.mousePressed(() =>this.groupClue(this.group));
+        if(this.game.clueTokens <= 0) {
+            numberClueButton.attribute('disabled', 'disabled');
+            groupClueButton.attribute('disabled', 'disabled');
+        }
     }
 
     numberClue() {

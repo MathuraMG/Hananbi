@@ -74,7 +74,7 @@ class Game {
         this.board.displayGameBoard(window.innerWidth/3 , window.innerHeight/2);
         for(let i=0;i<this.noPlayers;i++) {
             let hide = (i == props.currentPlayer) ;
-            this.players[i].display({x:0, y:(CARDSIZE.y +50) * i,hide:hide});
+            this.players[i].display({ x: 0, y:(CARDSIZE.y) * i * 2 + CARDSIZE.y/2, hide: hide });
         }
     }
 
