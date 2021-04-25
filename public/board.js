@@ -21,12 +21,12 @@ class Board {
 
     setState(state) {
         this.deck = state.deck.map(cardState => {
-            return new Card(
-                cardState.number,
-                cardState.group,
-                cardState.id,
-                this.game
-            )
+            return new Card({
+                number: cardState.number,
+                group: cardState.group,
+                id: cardState.id,
+                game: this.game
+            })
         });
         this.gameStack = state.gameStack;
         this.discardPile = state.discardPile;

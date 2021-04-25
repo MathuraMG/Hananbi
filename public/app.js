@@ -16,7 +16,9 @@ socket.on('startGame', (data) => {
 socket.on('loadGame', (data) => {
     loadGame(data);
     socket.playerId = data.player; // NOTE: Are we using this anywhere?
-    currentPlayer = data.player;
+    if (data.player) {
+      currentPlayer = data.player;
+    }
 });
 
 function startGame(data) {

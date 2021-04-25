@@ -16,13 +16,15 @@ class Player {
     setState(state) {
         this.id = state.id,
         this.cards = state.cards.map(cardState => {
-            return new Card(
-                cardState.number,
-                cardState.group,
-                cardState.id,
-                this.game,
-                this
-            )
+            return new Card({
+                number: cardState.number,
+                group: cardState.group,
+                numberRevealed: cardState.numberRevealed,
+                groupRevealed: cardState.groupRevealed,
+                id: cardState.id,
+                game: this.game,
+                player: this
+            })
         });
     }
 

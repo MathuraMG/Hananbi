@@ -37,13 +37,13 @@ io.sockets.on('connection', function(socket){
 
     socket.on('setGameState', function(data) {
         gameState = data.state;
-        // io.to(socket.id).emit('loadGame', { data: data });
+        socket.broadcast.emit('loadGame', { state: gameState });
     })
 
     //Listen for this client to disconnect
     socket.on('disconnect', function() {
         console.log("A client has disconnected: " + socket.id);
-        players.splice(players.findIndex((player) => player.id ===socket.id), 1);
+        players.splice(players.findIndex((player) => player.id === socket.id), 1);
     });
 
 })

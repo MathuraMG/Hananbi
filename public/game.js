@@ -14,12 +14,12 @@ class Game {
         for(let i=0; i<this.groups.length; i++)
         {
             for(let j=0;j<this.numbers.length;j++) {
-                deck.push(new Card(
-                    this.numbers[j],
-                    this.groups[i],
-                    j*this.groups.length + i,
-                    this
-                ));
+                deck.push(new Card({
+                    number: this.numbers[j],
+                    group: this.groups[i],
+                    id: j*this.groups.length + i,
+                    game: this
+                }));
             }
         }
         shuffle(deck, true);
@@ -61,7 +61,7 @@ class Game {
         this.board.addToDiscardPile(card);
         this.dealCard(player);
         this.log();
-        this.display({currentPlayer});
+        this.update();
     }
 
     play(card, player) {
@@ -69,7 +69,7 @@ class Game {
         this.board.playCard(card);
         this.dealCard(player);
         this.log();
-        this.display({currentPlayer});
+        this.update();
     }
 
     numberClue(card) {
@@ -81,7 +81,7 @@ class Game {
         }
       })
       this.clueTokens -= 1;
-      this.display({currentPlayer});
+      this.update();
     }
 
     groupClue(card) {
@@ -93,7 +93,7 @@ class Game {
         }
       })
       this.clueTokens -= 1;
-      this.display({currentPlayer});
+      this.update();
     }
 
     player(id) {

@@ -5,21 +5,23 @@ const CARDSIZE = {x:80, y:120};
 const GROUPS = ["red", "yellow", "blue", "green", "white"];
 
 class Card {
-    constructor(number, group, id, game, player) {
-        this.number = number;
-        this.group = group;
-        this.id = id;
-        this.numberRevealed = false;
-        this.groupRevealed = false;
-        this.player = player || null;
-        this.game = game;
+    constructor(props) {
+        this.number = props.number;
+        this.group = props.group;
+        this.id = props.id;
+        this.numberRevealed = props.numberRevealed || false;
+        this.groupRevealed = props.groupRevealed || false;
+        this.player = props.player || null;
+        this.game = props.game;
     }
 
     state() {
         return {
             id: this.id,
             number: this.number,
-            group: this.group
+            group: this.group,
+            numberRevealed: this.numberRevealed,
+            groupRevealed: this.groupRevealed
         }
     }
 
