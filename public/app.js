@@ -21,8 +21,7 @@ socket.on('loadGame', (data) => {
 
 function startGame(data) {
     if (myGame) {
-        socket.emit('setGameState', {state: myGame.state()});
-        myGame.display({currentPlayer});
+        myGame.update();
     } else {
         setTimeout((() => startGame(data)), 1000);
     }

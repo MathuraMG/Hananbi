@@ -98,7 +98,6 @@ class Card {
     }
 
     playCard() {
-        // debugger;
         this.game.play(this, this.player);
     }
 

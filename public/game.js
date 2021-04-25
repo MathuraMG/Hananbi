@@ -8,10 +8,10 @@ class Game {
         this.clueTokens = 8;
         this.maxClueTokens = 8;
     }
+
     initCards() {
-        //create a random shuffle of the starter cards
         let deck = [];
-        for(let i=0; i<this.groups.length; i++)    //5 colours
+        for(let i=0; i<this.groups.length; i++)
         {
             for(let j=0;j<this.numbers.length;j++) {
                 deck.push(new Card(
@@ -25,6 +25,16 @@ class Game {
         shuffle(deck, true);
         console.log(deck)
         this.board.deck= deck;
+    }
+
+    initPlayers() {
+        for(let i = 0;i<this.noPlayers;i++) {
+           this.players.push(new Player(i, this));
+
+           for(let j=0;j<5;j++) {
+               this.dealCard(this.players[i]);
+           }
+        }
     }
 
     state() {
@@ -41,14 +51,25 @@ class Game {
         })
     }
 
-    player(id) {
-        return this.players.find(player => player.id === id)
+    update() {
+      socket.emit('setGameState', {state: this.state()});
+      this.display({currentPlayer});
     }
 
-    dealCard(player) {
-        let card = this.board.deck.pop();
-        card.player = player;
-        player.cards.push(card);
+    discard(card, player) {
+        player.removeCard(card);
+        this.board.addToDiscardPile(card);
+        this.dealCard(player);
+        this.log();
+        this.display({currentPlayer});
+    }
+
+    play(card, player) {
+        player.removeCard(card);
+        this.board.playCard(card);
+        this.dealCard(player);
+        this.log();
+        this.display({currentPlayer});
     }
 
     numberClue(card) {
@@ -75,14 +96,14 @@ class Game {
       this.display({currentPlayer});
     }
 
-    initPlayers() {
-        for(let i = 0;i<this.noPlayers;i++) {
-           this.players.push(new Player(i, this));
+    player(id) {
+        return this.players.find(player => player.id === id)
+    }
 
-           for(let j=0;j<5;j++) {
-               this.dealCard(this.players[i]);
-           }
-        }
+    dealCard(player) {
+        let card = this.board.deck.pop();
+        card.player = player;
+        player.cards.push(card);
     }
 
     log() {
@@ -97,6 +118,7 @@ class Game {
         removeButtons();
         this.displayClues();
         this.board.displayGameBoard(window.innerWidth/3 , window.innerHeight/2);
+        this.board.displayDiscardPile(window.innerWidth-100, window.innerHeight-100);
         for(let i=0;i<this.noPlayers;i++) {
             let hide = (i == props.currentPlayer) ;
             this.players[i].display({ x: 0, y:(CARDSIZE.y) * i * 2 + CARDSIZE.y/2, hide: hide });
@@ -107,25 +129,5 @@ class Game {
       fill(0);
       textSize(20);
       text(`Clues: ${this.clueTokens}`, 0, 20);
-    }
-
-    discard(card, player) {
-        player.removeCard(card);
-        this.board.addToDiscardPile(card);
-        this.dealCard(player);
-        this.log();
-        this.display({currentPlayer});
-        this.board.displayDiscardPile(window.innerWidth-100, window.innerHeight-100);
-
-    }
-
-    play(card, player) {
-        player.removeCard(card);
-        this.board.playCard(card);
-        this.dealCard(player);
-        this.log();
-        this.display({currentPlayer});
-        this.board.displayDiscardPile(window.innerWidth-100, window.innerHeight-100);
-
     }
 }
