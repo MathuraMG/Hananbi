@@ -40,15 +40,19 @@ class Game {
     state() {
         return {
             board: this.board.state(),
-            players: this.players.map((player) => player.state())
+            players: this.players.map((player) => player.state()),
+            clueTokens: this.clueTokens
         }
     }
 
     setState(state) {
         this.board.setState(state.board);
+
         state.players.forEach(playerState => {
             this.player(playerState.id).setState(playerState);
-        })
+        });
+
+        this.clueTokens = state.clueTokens;
     }
 
     update() {

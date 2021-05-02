@@ -20,7 +20,6 @@ class Board {
     }
 
     setState(state) {
-        // debugger;
         this.deck = state.deck.map(cardState => {
             return new Card({
                 number: cardState.number,
