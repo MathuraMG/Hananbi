@@ -8,17 +8,18 @@ socket.on('connect', () => {
 });
 
 socket.on('startGame', (data) => {
-    startGame(data);
     socket.playerId = data.player; // NOTE: Are we using this anywhere?
     currentPlayer = data.player;
+    startGame(data);
 });
 
 socket.on('loadGame', (data) => {
-    loadGame(data);
+    
     socket.playerId = data.player; // NOTE: Are we using this anywhere?
     if (data.player) {
       currentPlayer = data.player;
     }
+    loadGame(data);
 });
 
 function startGame(data) {
