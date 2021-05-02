@@ -1,10 +1,3 @@
-// const { text } = require("express");
-
-/** GLOBAL CONFIG **/
-const CARDSIZE = {x:80, y:120};
-// const GROUPS = ["red", "potato", "blue", "green", "white"];
-const GROUPS = ["#CD5C5C", "#FFE266", "#6EB6BA", "#3CB371", "#9F82F9"];
-
 class Card {
     constructor(props) {
         this.number = props.number;
@@ -41,7 +34,7 @@ class Card {
       let x = props.x;
       let y = props.y - clueSize;
 
-      let fillColor = this.groupRevealed ? this.group : "#aaaaaa";
+      let fillColor = this.groupRevealed ? CARDCOLORS[this.group] : "#aaaaaa";
       fill(fillColor);
       rect(x, y, CARDSIZE.x, clueSize);
 
@@ -72,7 +65,7 @@ class Card {
         let x = props.x;
         let y = props.y;
 
-        fill(this.group);
+        fill(CARDCOLORS[this.group]);
         rect(x, y, CARDSIZE.x, CARDSIZE.y);
         fill(0);
         textSize(20);

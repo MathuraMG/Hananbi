@@ -39,14 +39,14 @@ class Board {
 
     displayDiscardPile(x,y) {
         this.discardPile.forEach((card, index)=> {
-            fill(card.group);
+            fill(CARDCOLORS[card.group]);
             text(card.number,x+index*10, y);
         })
     }
 
     displayGameBoard(x,y) {
         GROUPS.forEach((group, index)=> {
-            fill(group);
+            fill(CARDCOLORS[group]);
             rect(x+index*(CARDSIZE.x+30) , y, CARDSIZE.x, CARDSIZE.y);
             debugger;
             if(this.gameStack[group].length > 0) {
