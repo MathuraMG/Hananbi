@@ -2,7 +2,8 @@
 
 /** GLOBAL CONFIG **/
 const CARDSIZE = {x:80, y:120};
-const GROUPS = ["red", "yellow", "blue", "green", "white"];
+// const GROUPS = ["red", "potato", "blue", "green", "white"];
+const GROUPS = ["#CD5C5C", "#FFE266", "#6EB6BA", "#3CB371", "#9F82F9"];
 
 class Card {
     constructor(props) {

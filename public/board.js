@@ -20,6 +20,7 @@ class Board {
     }
 
     setState(state) {
+        // debugger;
         this.deck = state.deck.map(cardState => {
             return new Card({
                 number: cardState.number,
@@ -47,7 +48,7 @@ class Board {
         GROUPS.forEach((group, index)=> {
             fill(group);
             rect(x+index*(CARDSIZE.x+30) , y, CARDSIZE.x, CARDSIZE.y);
-            // debugger;
+            debugger;
             if(this.gameStack[group].length > 0) {
                 fill(0);
                 let displayNumber = this.gameStack[group][this.gameStack[group].length-1];
