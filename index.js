@@ -11,28 +11,42 @@ server.listen(port, () => {
 });
 
 let maxPlayers = 3;
-let players = [];
+let players = [null, null, null];
 let gameState = null;
 //Initialize socket.io
 let io = require('socket.io').listen(server);
 
-io.sockets.on('connection', function(socket){
-    console.log("A new user has joined!" + socket.id);
+function emptyLobby() {
+  return players.every((player) => !player);
+}
 
-    if (players.length === 0) {
-        players.push({id: socket.id})
+function nextAvailableSeat() {
+  return players.indexOf(null);
+}
+
+io.sockets.on('connection', function(socket){
+    if (emptyLobby()) {
+      let nextSeat = nextAvailableSeat();
+      console.log(`${socket.id}: Joined the game.`);
+      console.log(`${socket.id}: Starting the game.`);
+        players[nextSeat] = socket.id;
         io.to(socket.id).emit('startGame', {
             numPlayers: maxPlayers,
-            player: 0
-        });
-    } else if (players.length < maxPlayers) {
-        players.push({id: socket.id})
-        io.to(socket.id).emit('loadGame', {
-            state: gameState,
-            player: players.length - 1
+            player: nextSeat
         });
     } else {
-        // game is full - TBD
+      let nextSeat = nextAvailableSeat();
+      console.log(`${socket.id}: Joined the game.`);
+      if (nextSeat >= 0) {
+        console.log(`${socket.id}: Sitting in seat ${nextSeat}.`);
+        players[nextSeat] = socket.id;
+        io.to(socket.id).emit('loadGame', {
+            state: gameState,
+            player: nextSeat
+        });
+      } else {
+        console.log(`${socket.id}: Game full.`);
+      }
     }
 
     socket.on('setGameState', function(data) {
@@ -42,8 +56,8 @@ io.sockets.on('connection', function(socket){
 
     //Listen for this client to disconnect
     socket.on('disconnect', function() {
-        console.log("A client has disconnected: " + socket.id);
-        players.splice(players.findIndex((player) => player.id === socket.id), 1);
+        console.log(`${socket.id}: Left the game.`);
+        let playerNumber = players.indexOf(socket.id);
+        players[playerNumber] = null;
     });
-
 })
