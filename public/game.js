@@ -64,27 +64,31 @@ class Game {
     }
 
     discard(card, player) {
-        yourTurn() && return;
+        if (!this.yourTurn()) { return };
 
         player.removeCard(card);
         this.board.addToDiscardPile(card);
         this.dealCard(player);
+        this.endTurn();
+
         this.log();
         this.update();
     }
 
     play(card, player) {
-        yourTurn() && return;
+        if (!this.yourTurn()) { return };
 
         player.removeCard(card);
         this.board.playCard(card);
         this.dealCard(player);
+        this.endTurn();
+
         this.log();
         this.update();
     }
 
     numberClue(card) {
-      yourTurn() && return;
+      if (!this.yourTurn()) { return };
 
       let player = card.player;
       let number = card.number
@@ -94,11 +98,14 @@ class Game {
         }
       })
       this.clueTokens -= 1;
+      this.endTurn();
+
+      this.log();
       this.update();
     }
 
     groupClue(card) {
-      yourTurn() && return;
+      if (!this.yourTurn()) { return };
 
       let player = card.player;
       let group = card.group
@@ -108,6 +115,9 @@ class Game {
         }
       })
       this.clueTokens -= 1;
+      this.endTurn();
+
+      this.log();
       this.update();
     }
 
@@ -117,6 +127,10 @@ class Game {
 
     yourTurn() {
       return currentPlayer === this.playerTurn;
+    }
+
+    endTurn() {
+      this.playerTurn = (this.playerTurn + 1) % this.players.length
     }
 
     dealCard(player) {
