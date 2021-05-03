@@ -118,14 +118,14 @@ class Game {
     }
 
     display(props) {
-        background("peachpuff");
+        background(BACKGROUND);
         removeButtons();
         this.displayClues();
         this.board.displayGameBoard(window.innerWidth/3 , window.innerHeight/2);
         this.board.displayDiscardPile(window.innerWidth-100, window.innerHeight-100);
         for(let i=0;i<this.noPlayers;i++) {
             let hide = (i == props.currentPlayer) ;
-            this.players[i].display({ x: 0, y:(CARDSIZE.y) * i * 2 + CARDSIZE.y/2, hide: hide });
+            this.players[i].display({ x: BOARD.padding, y:(CARDSIZE.y) * i * 2 + CARDSIZE.y/2, hide: hide });
         }
     }
 

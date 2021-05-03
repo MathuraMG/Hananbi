@@ -46,12 +46,17 @@ class Board {
     displayGameBoard(x,y) {
         GROUPS.forEach((group, index)=> {
             fill(CARDCOLORS[group]);
-            rect(x+index*(CARDSIZE.x+30) , y, CARDSIZE.x, CARDSIZE.y);
-            debugger;
+            rect(BOARD.xStack , (CARDSIZE.y+10)*index+(CARDSIZE.y/2), CARDSIZE.x, CARDSIZE.y,CARDSIZE.radius);
             if(this.gameStack[group].length > 0) {
-                fill(0);
                 let displayNumber = this.gameStack[group][this.gameStack[group].length-1];
-                text(displayNumber,x+index*(CARDSIZE.x+30) , y);
+                //shadow         
+                fill(COLORS.shadow);
+                textSize(CARDSIZE.fontSize);
+                text(displayNumber,BOARD.xStack+CARDSIZE.padding+5,(CARDSIZE.y+10)*(index+1)+(CARDSIZE.y/2)-CARDSIZE.padding-5);
+                //number         
+                fill(COLORS.white);
+                textSize(CARDSIZE.fontSize);
+                text(displayNumber,BOARD.xStack+CARDSIZE.padding,(CARDSIZE.y+10)*(index+1)+(CARDSIZE.y/2)-CARDSIZE.padding-10);
             }
         })
     }

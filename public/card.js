@@ -24,24 +24,23 @@ class Card {
         let groupClueButton, numberClueButton;
         let x = props.x;
         let y = props.y;
-
-        this.displayClue(props);
+        if(this.groupRevealed || this.numberRevealed) {
+            this.displayClue(props);
+        }
         props.hide ? this.displayHiddenCards(props) : this.displayRevealedCards(props);
     }
 
     displayClue(props) {
-      let clueSize = 20;
       let x = props.x;
-      let y = props.y - clueSize;
-
-      let fillColor = this.groupRevealed ? CARDCOLORS[this.group] : "#aaaaaa";
+      let y = props.y - CLUESIZE.fontSize - CLUESIZE.padding;
+      let fillColor = this.groupRevealed ? CLUECOLORS[this.group] : CLUECOLORS["grey"];
       fill(fillColor);
-      rect(x, y, CARDSIZE.x, clueSize);
+      rect(x, y, CLUESIZE.x, CLUESIZE.y, CLUESIZE.radius);
 
       if (this.numberRevealed) {
-        fill(0);
-        textSize(20);
-        text(this.number, x, y + clueSize);
+        fill(COLORS.white);
+        textSize(CLUESIZE.fontSize);
+        text(this.number, x+CLUESIZE.padding, y + CLUESIZE.fontSize + CLUESIZE.padding/3);
       }
     }
 
@@ -50,8 +49,8 @@ class Card {
         let x = props.x;
         let y = props.y;
 
-        fill("#aaaaaa");
-        rect(x, y, CARDSIZE.x, CARDSIZE.y);
+        fill(CARDCOLORS.grey);
+        rect(x, y, CARDSIZE.x, CARDSIZE.y,CARDSIZE.radius);
         playButton = createButton('Play');
         discardButton = createButton('discard');
         playButton.position(x, y + CARDSIZE.y+30);
@@ -66,11 +65,16 @@ class Card {
         let y = props.y;
 
         fill(CARDCOLORS[this.group]);
-        rect(x, y, CARDSIZE.x, CARDSIZE.y);
-        fill(0);
-        textSize(20);
-        text(this.number, x+10, y+20);
-        fill(0);
+        rect(x, y, CARDSIZE.x, CARDSIZE.y,CARDSIZE.radius);
+        //number shadow
+        fill(COLORS.shadow);
+        textSize(CARDSIZE.fontSize);
+        text(this.number, x+CARDSIZE.padding+5, y+CARDSIZE.y-CARDSIZE.padding+5);
+        //number        
+        fill(COLORS.white);
+        textSize(CARDSIZE.fontSize);
+        text(this.number, x+CARDSIZE.padding, y+CARDSIZE.y-CARDSIZE.padding);
+        // fill(0);
         numberClueButton = createButton(this.number);
         groupClueButton = createButton(this.group);
         numberClueButton.position(x, y + CARDSIZE.y+30);

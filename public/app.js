@@ -43,7 +43,8 @@ function setup() {
     myGame = new Game(3);
     myGame.initCards();
     myGame.initPlayers();
-    createCanvas(window.innerWidth, window.innerHeight);
+    noStroke();
+    createCanvas(BOARD.width, BOARD.height);
 }
 
 window.onbeforeunload = function() {
