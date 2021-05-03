@@ -64,6 +64,8 @@ class Game {
     }
 
     discard(card, player) {
+        yourTurn() && return;
+
         player.removeCard(card);
         this.board.addToDiscardPile(card);
         this.dealCard(player);
@@ -72,6 +74,8 @@ class Game {
     }
 
     play(card, player) {
+        yourTurn() && return;
+
         player.removeCard(card);
         this.board.playCard(card);
         this.dealCard(player);
@@ -80,6 +84,8 @@ class Game {
     }
 
     numberClue(card) {
+      yourTurn() && return;
+
       let player = card.player;
       let number = card.number
       player.cards.forEach((card) => {
@@ -92,6 +98,8 @@ class Game {
     }
 
     groupClue(card) {
+      yourTurn() && return;
+
       let player = card.player;
       let group = card.group
       player.cards.forEach((card) => {
