@@ -20,10 +20,6 @@ class Card {
     }
 
     display(props) {
-        let playButton, discardButton;
-        let groupClueButton, numberClueButton;
-        let x = props.x;
-        let y = props.y;
         if(this.groupRevealed || this.numberRevealed) {
             this.displayClue(props);
         }
@@ -51,12 +47,14 @@ class Card {
 
         fill(CARDCOLORS.grey);
         rect(x, y, CARDSIZE.x, CARDSIZE.y,CARDSIZE.radius);
-        playButton = createButton('Play');
-        discardButton = createButton('discard');
-        playButton.position(x, y + CARDSIZE.y+30);
-        discardButton.position(x, y + CARDSIZE.y+50);
-        playButton.mousePressed(() => this.playCard());
-        discardButton.mousePressed(() =>this.discardCard());
+        if (this.game.yourTurn()) {
+            playButton = createButton('Play');
+            discardButton = createButton('discard');
+            playButton.position(x, y + CARDSIZE.y+30);
+            discardButton.position(x, y + CARDSIZE.y+50);
+            playButton.mousePressed(() => this.playCard());
+            discardButton.mousePressed(() =>this.discardCard());
+        }
     }
 
     displayRevealedCards(props) {
@@ -75,15 +73,17 @@ class Card {
         textSize(CARDSIZE.fontSize);
         text(this.number, x+CARDSIZE.padding, y+CARDSIZE.y-CARDSIZE.padding);
         // fill(0);
-        numberClueButton = createButton(this.number);
-        groupClueButton = createButton(this.group);
-        numberClueButton.position(x, y + CARDSIZE.y+30);
-        groupClueButton.position(x, y + CARDSIZE.y+50);
-        numberClueButton.mousePressed(() => this.numberClue(this.number));
-        groupClueButton.mousePressed(() =>this.groupClue(this.group));
-        if(this.game.clueTokens <= 0) {
-            numberClueButton.attribute('disabled', 'disabled');
-            groupClueButton.attribute('disabled', 'disabled');
+        if (this.game.yourTurn()) {
+            numberClueButton = createButton(this.number);
+            groupClueButton = createButton(this.group);
+            numberClueButton.position(x, y + CARDSIZE.y+30);
+            groupClueButton.position(x, y + CARDSIZE.y+50);
+            numberClueButton.mousePressed(() => this.numberClue(this.number));
+            groupClueButton.mousePressed(() =>this.groupClue(this.group));
+            if(this.game.clueTokens <= 0) {
+                numberClueButton.attribute('disabled', 'disabled');
+                groupClueButton.attribute('disabled', 'disabled');
+            }
         }
     }
 

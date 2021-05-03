@@ -5,6 +5,7 @@ class Game {
         this.groups = GROUPS;
         this.board = new Board({ game: this });
         this.players = [];
+        this.playerTurn = 0;
         this.clueTokens = 8;
         this.maxClueTokens = 8;
     }
@@ -41,7 +42,8 @@ class Game {
         return {
             board: this.board.state(),
             players: this.players.map((player) => player.state()),
-            clueTokens: this.clueTokens
+            clueTokens: this.clueTokens,
+            playerTurn: this.playerTurn
         }
     }
 
@@ -53,6 +55,7 @@ class Game {
         });
 
         this.clueTokens = state.clueTokens;
+        this.playerTurn = state.playerTurn;
     }
 
     update() {
@@ -61,22 +64,32 @@ class Game {
     }
 
     discard(card, player) {
+        if (!this.yourTurn()) { return };
+
         player.removeCard(card);
         this.board.addToDiscardPile(card);
         this.dealCard(player);
+        this.endTurn();
+
         this.log();
         this.update();
     }
 
     play(card, player) {
+        if (!this.yourTurn()) { return };
+
         player.removeCard(card);
         this.board.playCard(card);
         this.dealCard(player);
+        this.endTurn();
+
         this.log();
         this.update();
     }
 
     numberClue(card) {
+      if (!this.yourTurn()) { return };
+
       let player = card.player;
       let number = card.number
       player.cards.forEach((card) => {
@@ -85,10 +98,15 @@ class Game {
         }
       })
       this.clueTokens -= 1;
+      this.endTurn();
+
+      this.log();
       this.update();
     }
 
     groupClue(card) {
+      if (!this.yourTurn()) { return };
+
       let player = card.player;
       let group = card.group
       player.cards.forEach((card) => {
@@ -97,11 +115,22 @@ class Game {
         }
       })
       this.clueTokens -= 1;
+      this.endTurn();
+
+      this.log();
       this.update();
     }
 
     player(id) {
         return this.players.find(player => player.id === id)
+    }
+
+    yourTurn() {
+      return currentPlayer === this.playerTurn;
+    }
+
+    endTurn() {
+      this.playerTurn = (this.playerTurn + 1) % this.players.length
     }
 
     dealCard(player) {
