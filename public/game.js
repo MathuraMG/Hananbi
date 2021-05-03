@@ -5,6 +5,7 @@ class Game {
         this.groups = GROUPS;
         this.board = new Board({ game: this });
         this.players = [];
+        this.playerTurn = 0;
         this.clueTokens = 8;
         this.maxClueTokens = 8;
     }
@@ -41,7 +42,8 @@ class Game {
         return {
             board: this.board.state(),
             players: this.players.map((player) => player.state()),
-            clueTokens: this.clueTokens
+            clueTokens: this.clueTokens,
+            playerTurn: this.playerTurn
         }
     }
 
@@ -53,6 +55,7 @@ class Game {
         });
 
         this.clueTokens = state.clueTokens;
+        this.playerTurn = state.playerTurn;
     }
 
     update() {
@@ -102,6 +105,10 @@ class Game {
 
     player(id) {
         return this.players.find(player => player.id === id)
+    }
+
+    yourTurn() {
+      return currentPlayer === this.playerTurn;
     }
 
     dealCard(player) {
