@@ -47,7 +47,6 @@ class Board {
         GROUPS.forEach((group, index)=> {
             fill(CARDCOLORS[group]);
             rect(x+index*(CARDSIZE.x+30) , y, CARDSIZE.x, CARDSIZE.y);
-            debugger;
             if(this.gameStack[group].length > 0) {
                 fill(0);
                 let displayNumber = this.gameStack[group][this.gameStack[group].length-1];
