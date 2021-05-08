@@ -54,7 +54,7 @@ function newPlayer(props) {
 
   return {
     id: id,
-    name: `Player ${playerNumber}`
+    name: `Player ${playerNumber + 1}`
   }
 }
 
@@ -70,6 +70,8 @@ io.sockets.on('connection', function(socket){
           numPlayers: maxPlayers,
           player: nextSeat
       });
+
+      io.emit('loadProfiles', { profiles: players });
     } else {
       let nextSeat = nextAvailableSeat();
       console.log(`${socket.id}: Joined the game.`);
@@ -83,6 +85,8 @@ io.sockets.on('connection', function(socket){
             state: gameState,
             player: nextSeat
         });
+
+        io.emit('loadProfiles', { profiles: players });
       } else {
         console.log(`${socket.id}: Game full.`);
       }
@@ -96,7 +100,9 @@ io.sockets.on('connection', function(socket){
     //Listen for this client to disconnect
     socket.on('disconnect', function() {
         console.log(`${socket.id}: Left the game.`);
-        let playerNumber = players.findIndex((player) => socket.id === player.id);
+        let playerNumber = players.findIndex((player) => (player && (socket.id === player.id)));
         players[playerNumber] = null;
+
+        io.emit('loadProfiles', { profiles: players });
     });
 })

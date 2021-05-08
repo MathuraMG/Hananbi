@@ -33,8 +33,33 @@ class Player {
     }
 
     display(props) {
-        for(let i=0;i<this.cards.length;i++) {
-            this.cards[i].display({x:props.x + i * (CARDSIZE.x +20), y:props.y, hide:props.hide});
+        for(let i = 0; i < this.cards.length; i++) {
+            this.cards[i].display({
+              x: props.x + i * (CARDSIZE.x + 20),
+              y: props.y,
+              hide:props.hide
+            });
         }
+
+        this.displayProfile({
+          x: props.x + this.cards.length * (CARDSIZE.x + 20),
+          y: props.y,
+          yourTurn: props.yourTurn
+        });
+    }
+
+    displayProfile(props) {
+      let x = props.x;
+      let y = props.y;
+      let name = playerProfiles[this.id] && playerProfiles[this.id].name;
+
+      if (!name) { return; }
+
+      push();
+      fill(COLORS.white);
+      textSize(20);
+      if (props.yourTurn) { textStyle(BOLDITALIC); }
+      text(name, x, y);
+      pop();
     }
 }

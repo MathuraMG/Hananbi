@@ -1,6 +1,7 @@
 let socket = io();
 let myGame;
 let currentPlayer;
+let playerProfiles = {};
 
 //Listen for confirmation of connection
 socket.on('connect', () => {
@@ -14,12 +15,18 @@ socket.on('startGame', (data) => {
 });
 
 socket.on('loadGame', (data) => {
-    
     socket.playerId = data.player; // NOTE: Are we using this anywhere?
     if (data.player) {
       currentPlayer = data.player;
     }
     loadGame(data);
+});
+
+socket.on('loadProfiles', (data) => {
+  playerProfiles = data.profiles;
+  if (myGame) {
+    myGame.display({currentPlayer});
+  }
 });
 
 function startGame(data) {
