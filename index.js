@@ -1,5 +1,29 @@
 let express = require('express');
 let app = express();
+
+// ---------------------
+// Game stuff
+// ---------------------
+
+let maxPlayers, players, gameState;
+
+function initializeGame() {
+  maxPlayers = 3;
+  players = [null, null, null];
+  gameState = null;
+}
+
+initializeGame();
+
+// ---------------------
+// Web stuff
+// ---------------------
+
+app.get('/reset', function(req, res) {
+  initializeGame();
+  res.send('Game reset');
+});
+
 app.use('/', express.static('public'));
 
 //Initialize the actual HTTP server
@@ -10,10 +34,10 @@ server.listen(port, () => {
     console.log("Server listening at port: " + port);
 });
 
-let maxPlayers = 3;
-let players = [null, null, null];
-let gameState = null;
-//Initialize socket.io
+// ---------------------
+// Socket stuff
+// ---------------------
+
 let io = require('socket.io').listen(server);
 
 function emptyLobby() {
