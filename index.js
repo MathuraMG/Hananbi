@@ -53,7 +53,7 @@ io.sockets.on('connection', function(socket){
       let nextSeat = nextAvailableSeat();
       console.log(`${socket.id}: Joined the game.`);
       console.log(`${socket.id}: Starting the game.`);
-        players[nextSeat] = socket.id;
+        players[nextSeat] = {id: socket.id};
         io.to(socket.id).emit('startGame', {
             numPlayers: maxPlayers,
             player: nextSeat
@@ -63,7 +63,7 @@ io.sockets.on('connection', function(socket){
       console.log(`${socket.id}: Joined the game.`);
       if (nextSeat >= 0) {
         console.log(`${socket.id}: Sitting in seat ${nextSeat}.`);
-        players[nextSeat] = socket.id;
+        players[nextSeat] = {id: socket.id};
         io.to(socket.id).emit('loadGame', {
             state: gameState,
             player: nextSeat
@@ -81,7 +81,7 @@ io.sockets.on('connection', function(socket){
     //Listen for this client to disconnect
     socket.on('disconnect', function() {
         console.log(`${socket.id}: Left the game.`);
-        let playerNumber = players.indexOf(socket.id);
+        let playerNumber = players.findIndex((player) => socket.id === player.id);
         players[playerNumber] = null;
     });
 })
