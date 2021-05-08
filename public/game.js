@@ -8,6 +8,8 @@ class Game {
         this.playerTurn = 0;
         this.clueTokens = 8;
         this.maxClueTokens = 8;
+        this.strikes = 0;
+        this.maxStrikes = 3;
     }
 
     initCards() {
@@ -43,6 +45,7 @@ class Game {
             board: this.board.state(),
             players: this.players.map((player) => player.state()),
             clueTokens: this.clueTokens,
+            strikes: this.strikes,
             playerTurn: this.playerTurn
         }
     }
@@ -55,6 +58,7 @@ class Game {
         });
 
         this.clueTokens = state.clueTokens;
+        this.strikes = state.strikes;
         this.playerTurn = state.playerTurn;
     }
 
@@ -79,7 +83,10 @@ class Game {
         if (!this.yourTurn()) { return };
 
         player.removeCard(card);
-        this.board.playCard(card);
+        let validPlay = this.board.playCard(card);
+        if (!validPlay) {
+          this.strikes++;
+        }
         this.dealCard(player);
         this.endTurn();
 
@@ -149,7 +156,7 @@ class Game {
     display(props) {
         background(BACKGROUND);
         removeButtons();
-        this.displayClues();
+        this.displayHUD();
         this.board.displayGameBoard(window.innerWidth/3 , window.innerHeight/2);
         this.board.displayDiscardPile(window.innerWidth-100, window.innerHeight-100);
         this.players.forEach((player, i) => {
@@ -165,9 +172,10 @@ class Game {
         });
     }
 
-    displayClues() {
+    displayHUD() {
       fill(COLORS.white);
       textSize(20);
       text(`Clues: ${this.clueTokens}`, 0, 20);
+      text(`Strikes: ${this.strikes}`, 0, 44);
     }
 }
