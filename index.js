@@ -48,22 +48,37 @@ function nextAvailableSeat() {
   return players.indexOf(null);
 }
 
+function newPlayer(props) {
+  let playerNumber = props.playerNumber;
+  let id = props.id;
+
+  return {
+    id: id,
+    name: `Player ${playerNumber}`
+  }
+}
+
 io.sockets.on('connection', function(socket){
     if (emptyLobby()) {
       let nextSeat = nextAvailableSeat();
       console.log(`${socket.id}: Joined the game.`);
       console.log(`${socket.id}: Starting the game.`);
-        players[nextSeat] = {id: socket.id};
-        io.to(socket.id).emit('startGame', {
-            numPlayers: maxPlayers,
-            player: nextSeat
-        });
+
+      players[nextSeat] = newPlayer({playerNumber: nextSeat, id: socket.id});
+
+      io.to(socket.id).emit('startGame', {
+          numPlayers: maxPlayers,
+          player: nextSeat
+      });
     } else {
       let nextSeat = nextAvailableSeat();
       console.log(`${socket.id}: Joined the game.`);
+
       if (nextSeat >= 0) {
         console.log(`${socket.id}: Sitting in seat ${nextSeat}.`);
-        players[nextSeat] = {id: socket.id};
+
+        players[nextSeat] = newPlayer({playerNumber: nextSeat, id: socket.id});
+
         io.to(socket.id).emit('loadGame', {
             state: gameState,
             player: nextSeat
