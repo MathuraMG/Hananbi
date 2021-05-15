@@ -1,16 +1,7 @@
 class Game {
     constructor(noPlayers) {
         this.noPlayers = noPlayers;
-        this.numbers = [1,1,1,2,2,3,3,4,4,5];
-        this.groups = GROUPS;
-        this.board = new Board({ game: this });
-        this.players = [];
-        this.playerTurn = 0;
-        this.clueTokens = 8;
-        this.maxClueTokens = 8;
-        this.strikes = 0;
-        this.maxStrikes = 3;
-        this.gameOver = false;
+        this.resetGame();
     }
 
     initCards() {
@@ -47,6 +38,7 @@ class Game {
             players: this.players.map((player) => player.state()),
             clueTokens: this.clueTokens,
             strikes: this.strikes,
+            timer: this.timer,
             gameOver: this.gameOver,
             playerTurn: this.playerTurn
         }
@@ -61,6 +53,7 @@ class Game {
 
         this.clueTokens = state.clueTokens;
         this.strikes = state.strikes;
+        this.timer = state.timer;
         this.gameOver = state.gameOver;
         this.playerTurn = state.playerTurn;
     }
@@ -72,9 +65,8 @@ class Game {
     }
 
     checkEndGame() {
-      if (this.strikes >= this.maxStrikes) {
-        this.gameOver = true;
-      }
+      if (this.strikes >= this.maxStrikes) { this.gameOver = true; }
+      if (this.timer === 0) { this.gameOver = true; }
     }
 
     discard(card, player) {
@@ -87,6 +79,29 @@ class Game {
 
         this.log();
         this.update();
+    }
+
+    resetGame() {
+      this.numbers = [1,1,1,2,2,3,3,4,4,5];
+      this.groups = GROUPS;
+      this.board = new Board({ game: this });
+      this.players = [];
+      this.playerTurn = 0;
+      this.clueTokens = 8;
+      this.maxClueTokens = 8;
+      this.strikes = 0;
+      this.maxStrikes = 3;
+      this.gameOver = false;
+      this.timer = this.noPlayers;
+    }
+
+    newGame() {
+      this.resetGame();
+      this.initCards();
+      this.initPlayers();
+
+      this.log();
+      this.update();
     }
 
     play(card, player) {
@@ -152,6 +167,11 @@ class Game {
 
     dealCard(player) {
         let card = this.board.deck.pop();
+        if (!card) {
+          this.timer--;
+          return;
+        }
+
         card.player = player;
         player.cards.push(card);
     }
@@ -189,6 +209,9 @@ class Game {
       text(`Strikes: ${this.strikes}`, 0, 44);
       if (this.gameOver) {
         text("Game over!", 0, 68);
+        let rematchButton = createButton('Rematch');
+        rematchButton.position(100, 68);
+        rematchButton.mousePressed(() => this.newGame());
       }
     }
 }

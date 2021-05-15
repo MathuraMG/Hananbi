@@ -52,7 +52,7 @@ class Card {
         rect(x, y, CARDSIZE.x, CARDSIZE.y,CARDSIZE.radius);
         if (this.game.yourTurn() && !this.game.gameOver) {
             playButton = createButton('Play');
-            discardButton = createButton('discard');
+            discardButton = createButton('Discard');
             playButton.position(x, y + CARDSIZE.y+30);
             discardButton.position(x, y + CARDSIZE.y+50);
             playButton.mousePressed(() => this.playCard());
