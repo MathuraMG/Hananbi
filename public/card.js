@@ -23,7 +23,10 @@ class Card {
         if(this.groupRevealed || this.numberRevealed) {
             this.displayClue(props);
         }
-        props.hide ? this.displayHiddenCards(props) : this.displayRevealedCards(props);
+
+        let hideCards = props.hide && !this.game.gameOver;
+
+        hideCards ? this.displayHiddenCards(props) : this.displayRevealedCards(props);
     }
 
     displayClue(props) {
@@ -47,7 +50,7 @@ class Card {
 
         fill(CARDCOLORS.grey);
         rect(x, y, CARDSIZE.x, CARDSIZE.y,CARDSIZE.radius);
-        if (this.game.yourTurn()) {
+        if (this.game.yourTurn() && !this.game.gameOver) {
             playButton = createButton('Play');
             discardButton = createButton('discard');
             playButton.position(x, y + CARDSIZE.y+30);
@@ -68,12 +71,12 @@ class Card {
         fill(COLORS.shadow);
         textSize(CARDSIZE.fontSize);
         text(this.number, x+CARDSIZE.padding+5, y+CARDSIZE.y-CARDSIZE.padding+5);
-        //number        
+        //number
         fill(COLORS.white);
         textSize(CARDSIZE.fontSize);
         text(this.number, x+CARDSIZE.padding, y+CARDSIZE.y-CARDSIZE.padding);
         // fill(0);
-        if (this.game.yourTurn()) {
+        if (this.game.yourTurn() && !this.game.gameOver) {
             numberClueButton = createButton(this.number);
             groupClueButton = createButton(this.group);
             numberClueButton.position(x, y + CARDSIZE.y+30);
