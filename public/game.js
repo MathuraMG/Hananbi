@@ -10,6 +10,7 @@ class Game {
         this.maxClueTokens = 8;
         this.strikes = 0;
         this.maxStrikes = 3;
+        this.gameOver = false;
     }
 
     initCards() {
@@ -46,6 +47,7 @@ class Game {
             players: this.players.map((player) => player.state()),
             clueTokens: this.clueTokens,
             strikes: this.strikes,
+            gameOver: this.gameOver,
             playerTurn: this.playerTurn
         }
     }
@@ -59,12 +61,20 @@ class Game {
 
         this.clueTokens = state.clueTokens;
         this.strikes = state.strikes;
+        this.gameOver = state.gameOver;
         this.playerTurn = state.playerTurn;
     }
 
     update() {
+      this.checkEndGame();
       socket.emit('setGameState', {state: this.state()});
       this.display({currentPlayer});
+    }
+
+    checkEndGame() {
+      if (this.strikes >= this.maxStrikes) {
+        this.gameOver = true;
+      }
     }
 
     discard(card, player) {
@@ -177,5 +187,8 @@ class Game {
       textSize(20);
       text(`Clues: ${this.clueTokens}`, 0, 20);
       text(`Strikes: ${this.strikes}`, 0, 44);
+      if (this.gameOver) {
+        text("Game over!", 0, 68);
+      }
     }
 }
