@@ -1,5 +1,3 @@
-const { listen } = require("socket.io");
-
 function removeButtons() {
     $('button').remove();
 }

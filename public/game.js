@@ -82,7 +82,7 @@ class Game {
     }
 
     resetGame() {
-      this.numbers = [1,1,1,2,2,3,3,4,4,5];
+      this.numbers = BOARD.numbers;
       this.groups = GROUPS;
       this.board = new Board({ game: this });
       this.players = [];
@@ -188,7 +188,6 @@ class Game {
         removeButtons();
         this.displayHUD();
         this.board.displayGameBoard(BOARD.padding + CARDSIZE.x*7 , BOARD.padding);
-        this.board.displayDiscardPile(window.innerWidth-100, window.innerHeight-100);
         this.displayGameStatus(BOARD.padding + CARDSIZE.x*9,BOARD.padding)
         this.players.forEach((player, i) => {
           let hide = (player.id == props.currentPlayer);
@@ -217,18 +216,19 @@ class Game {
       for(let i=0;i<this.strikes;i++) {
         cross(x+CARDSIZE.x*0.75 + CARDSIZE.x*i*1, y+2.5*CARDSIZE.x ,STRIKE.width,COLORS.red);
       }
+      this.board.displayDiscardPile(x,CARDSIZE.x*5);
     }
 
     displayHUD() {
+      push();
       fill(COLORS.white);
       textSize(20);
-      text(`Clues: ${this.clueTokens}`, 0, 20);
-      text(`Strikes: ${this.strikes}`, 0, 44);
       if (this.gameOver) {
-        text("Game over!", 0, 68);
+        text("Game over!", 0, 0);
         let rematchButton = createButton('Rematch');
-        rematchButton.position(100, 68);
+        rematchButton.position(150, 0);
         rematchButton.mousePressed(() => this.newGame());
       }
+      pop();
     }
 }

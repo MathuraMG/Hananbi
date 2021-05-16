@@ -2,7 +2,8 @@ const BOARD = {
   width:window.screen.availWidth,
   height: window.innerHeight,
   padding: window.innerHeight*.05, 
-  xStack : window.screen.availWidth*0.5
+  xStack : window.screen.availWidth*0.5,
+  numbers : [1,1,1,2,2,3,3,4,4,5]
 }
 const CARDSIZE = {
   x:window.innerHeight*.11, 
@@ -23,6 +24,9 @@ const CLUETOKEN = {
 }
 const STRIKE = {
   width: CARDSIZE.x*2/3,
+}
+const DISCARDPILE = {
+  fontSize: window.innerHeight*.045,
 }
 const GROUPS = ["red", "yellow", "blue", "green", "purple"];
 const COLORS = {

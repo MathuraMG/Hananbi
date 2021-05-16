@@ -37,9 +37,25 @@ class Board {
     }
 
     displayDiscardPile(x,y) {
-        this.discardPile.forEach((card, index)=> {
-            fill(CARDCOLORS[card.group]);
-            text(card.number,x+index*10, y);
+
+        let tempDiscardPile = JSON.parse(JSON.stringify(this.discardPile));
+        // debugger;
+            
+        GROUPS.forEach((group,i) => {
+            BOARD.numbers.forEach( (number,j)=> {
+
+                let card = tempDiscardPile.find((c) => (c.group === group && c.number === number))
+
+                if (card) {
+                    fill(CARDCOLORS[group]);
+                    textSize(DISCARDPILE.fontSize);
+                    text(number,x+j*DISCARDPILE.fontSize, y+i*DISCARDPILE.fontSize*1.5);
+                    // debugger;
+                    tempDiscardPile = tempDiscardPile.filter((c) => card.id !== c.id);
+                    // debugger;
+                }
+
+            })
         })
     }
 
