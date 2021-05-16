@@ -18,10 +18,18 @@ const CLUESIZE = {
   fontSize: window.innerHeight*.025,
   padding: window.innerHeight*.015
 }
+const CLUETOKEN = {
+  dia: CARDSIZE.x/2,
+}
+const STRIKE = {
+  width: CARDSIZE.x*2/3,
+}
 const GROUPS = ["red", "yellow", "blue", "green", "purple"];
 const COLORS = {
   white : "#ffffff",
-  shadow: "#00000066"
+  shadow: "#00000066",
+  darkblue: "#0f3b60",
+  red: "#CD5C5C"
 }
 const CARDCOLORS = {
   red: "#CD5C5C",

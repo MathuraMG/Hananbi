@@ -187,19 +187,36 @@ class Game {
         background(BACKGROUND);
         removeButtons();
         this.displayHUD();
-        this.board.displayGameBoard(window.innerWidth/3 , window.innerHeight/2);
+        this.board.displayGameBoard(BOARD.padding + CARDSIZE.x*7 , BOARD.padding);
         this.board.displayDiscardPile(window.innerWidth-100, window.innerHeight-100);
+        this.displayGameStatus(BOARD.padding + CARDSIZE.x*9,BOARD.padding)
         this.players.forEach((player, i) => {
           let hide = (player.id == props.currentPlayer);
           let yourTurn = (this.playerTurn === player.id);
 
           player.display({
             x: BOARD.padding,
-            y:(CARDSIZE.y) * i * 2 + CARDSIZE.y/2,
+            y:(CARDSIZE.y) * i * 2 +BOARD.padding,
             hide: hide,
             yourTurn: yourTurn
           });
         });
+    }
+
+    displayGameStatus(x,y) {
+      fill(COLORS.darkblue);
+      rect(x,y,CARDSIZE.x*4, CARDSIZE.y*5+40);
+      fill(COLORS.white);
+      textSize(20);
+      //clues
+      for(let i=0;i<this.clueTokens;i++) {
+        ellipse(x+CARDSIZE.x/2 + CARDSIZE.x*(i%4), y+CARDSIZE.x/2 +CARDSIZE.x*floor(i/4),CLUETOKEN.dia)
+      }
+
+      //strikes
+      for(let i=0;i<this.strikes;i++) {
+        cross(x+CARDSIZE.x*0.75 + CARDSIZE.x*i*1, y+2.5*CARDSIZE.x ,STRIKE.width,COLORS.red);
+      }
     }
 
     displayHUD() {
