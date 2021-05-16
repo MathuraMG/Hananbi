@@ -53,10 +53,17 @@ class Card {
         if (this.game.yourTurn() && !this.game.gameOver) {
             playButton = createButton('Play');
             discardButton = createButton('Discard');
-            playButton.position(x, y + CARDSIZE.y+30);
+            playButton.addClass('actionButton');
+            discardButton.addClass('actionButton');
+            playButton.position(x, y + CARDSIZE.y+20);
             discardButton.position(x, y + CARDSIZE.y+50);
             playButton.mousePressed(() => this.playCard());
             discardButton.mousePressed(() =>this.discardCard());
+
+            //style the buttons
+            playButton.style('width', `${CARDSIZE.x}px`);
+            discardButton.style('width', `${CARDSIZE.x}px`);
+
         }
     }
 
@@ -79,7 +86,13 @@ class Card {
         if (this.game.yourTurn() && !this.game.gameOver) {
             numberClueButton = createButton(this.number);
             groupClueButton = createButton(this.group);
-            numberClueButton.position(x, y + CARDSIZE.y+30);
+            //styles
+            numberClueButton.addClass('actionButton');
+            numberClueButton.style('width', `${CARDSIZE.x}px`);
+            groupClueButton.addClass('actionButton');
+            groupClueButton.style('width', `${CARDSIZE.x}px`);
+
+            numberClueButton.position(x, y + CARDSIZE.y+20);
             groupClueButton.position(x, y + CARDSIZE.y+50);
             numberClueButton.mousePressed(() => this.numberClue(this.number));
             groupClueButton.mousePressed(() =>this.groupClue(this.group));

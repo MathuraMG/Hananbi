@@ -2,3 +2,18 @@ head, body {
     padding: 0;
     margin: 0;
 }
+
+.actionButton {
+    padding: 0.3rem 0;
+    box-shadow: none;
+    border: none;
+    border-radius: 5px;
+    text-transform: capitalize;
+}
+
+.actionButton:hover {
+    transition: background-color 0.1s ease, color 0.1s ease;
+    cursor: pointer;
+    background-color: #333333;
+    color: white;
+}
