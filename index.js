@@ -58,7 +58,7 @@ function nextAvailableSeat(game) {
 function nextAvailableGame() {
   for (const gameKey in games) {
     let game = games[gameKey]
-    console.log("Checking game", gameKey)
+
     if (nextAvailableSeat(game) !== null) {
       return game;
     }
