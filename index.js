@@ -5,12 +5,17 @@ let app = express();
 // Game stuff
 // ---------------------
 
+let games = {};
+
 let maxPlayers, players, gameState;
 
 function initializeGame() {
-  maxPlayers = 3;
-  players = [null, null, null];
-  gameState = null;
+  let gameKey = "ABCD"
+  games[gameKey] = {
+    maxPlayers: 3,
+    players: [null, null, null],
+    gameState: null
+  }
 }
 
 initializeGame();
@@ -41,11 +46,11 @@ server.listen(port, () => {
 let io = require('socket.io').listen(server);
 
 function emptyLobby() {
-  return players.every((player) => !player);
+  return games["ABCD"].players.every((player) => !player);
 }
 
 function nextAvailableSeat() {
-  return players.indexOf(null);
+  return games["ABCD"].players.indexOf(null);
 }
 
 function newPlayer(props) {
@@ -59,19 +64,20 @@ function newPlayer(props) {
 }
 
 io.sockets.on('connection', function(socket){
+  socket.join("ABCD");
     if (emptyLobby()) {
       let nextSeat = nextAvailableSeat();
       console.log(`${socket.id}: Joined the game.`);
       console.log(`${socket.id}: Starting the game.`);
 
-      players[nextSeat] = newPlayer({playerNumber: nextSeat, id: socket.id});
+      games["ABCD"].players[nextSeat] = newPlayer({playerNumber: nextSeat, id: socket.id});
 
       io.to(socket.id).emit('startGame', {
-          numPlayers: maxPlayers,
+          numPlayers: games["ABCD"].maxPlayers,
           player: nextSeat
       });
 
-      io.emit('loadProfiles', { profiles: players });
+      io.to("ABCD").emit('loadProfiles', { profiles: games["ABCD"].players });
     } else {
       let nextSeat = nextAvailableSeat();
       console.log(`${socket.id}: Joined the game.`);
@@ -79,30 +85,30 @@ io.sockets.on('connection', function(socket){
       if (nextSeat >= 0) {
         console.log(`${socket.id}: Sitting in seat ${nextSeat}.`);
 
-        players[nextSeat] = newPlayer({playerNumber: nextSeat, id: socket.id});
+        games["ABCD"].players[nextSeat] = newPlayer({playerNumber: nextSeat, id: socket.id});
 
         io.to(socket.id).emit('loadGame', {
-            state: gameState,
+            state: games["ABCD"].gameState,
             player: nextSeat
         });
 
-        io.emit('loadProfiles', { profiles: players });
+        io.to("ABCD").emit('loadProfiles', { profiles: games["ABCD"].players });
       } else {
         console.log(`${socket.id}: Game full.`);
       }
     }
 
     socket.on('setGameState', function(data) {
-        gameState = data.state;
-        socket.broadcast.emit('loadGame', { state: gameState });
+        games["ABCD"].gameState = data.state;
+        socket.to("ABCD").broadcast.emit('loadGame', { state: games["ABCD"].gameState });
     })
 
     //Listen for this client to disconnect
     socket.on('disconnect', function() {
         console.log(`${socket.id}: Left the game.`);
-        let playerNumber = players.findIndex((player) => (player && (socket.id === player.id)));
-        players[playerNumber] = null;
+        let playerNumber = games["ABCD"].players.findIndex((player) => (player && (socket.id === player.id)));
+        games["ABCD"].players[playerNumber] = null;
 
-        io.emit('loadProfiles', { profiles: players });
+        io.to("ABCD").emit('loadProfiles', { profiles: games["ABCD"].players });
     });
 })
