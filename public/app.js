@@ -56,7 +56,7 @@ function setup() {
     push();
     textSize(CARDSIZE.fontSize);
     fill(COLORS.white);
-    text("Kinabi. Loading...", 20, BOARD.height/2 - CARDSIZE.fontSize/2);
+    text("Kinabi. Looking for games...", 20, BOARD.height/2 - CARDSIZE.fontSize/2);
     pop();
 }
 
