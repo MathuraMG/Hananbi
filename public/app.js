@@ -52,6 +52,12 @@ function setup() {
     myGame.initPlayers();
     noStroke();
     createCanvas(BOARD.width, BOARD.height);
+    background(BACKGROUND);
+    push();
+    textSize(CARDSIZE.fontSize);
+    fill(COLORS.white);
+    text("Kinabi. Loading...", 20, BOARD.height/2 - CARDSIZE.fontSize/2);
+    pop();
 }
 
 window.onbeforeunload = function() {
