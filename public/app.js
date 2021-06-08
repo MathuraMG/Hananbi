@@ -32,6 +32,7 @@ socket.on('loadProfiles', (data) => {
 
 function startGame(data) {
     if (myGame) {
+      console.log("GAME KEY", data.gameKey);
         gameKey = data.gameKey;
         myGame.update();
     } else {
@@ -41,6 +42,7 @@ function startGame(data) {
 
 function loadGame(data) {
     if (myGame) {
+      console.log("GAME KEY", data.gameKey);
         gameKey = data.gameKey;
         myGame.setState(data.state);
         myGame.display({currentPlayer});

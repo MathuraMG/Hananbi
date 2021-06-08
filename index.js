@@ -15,6 +15,7 @@ function initializeGame() {
   if (!gameKey) { return null; }
 
   games[gameKey] = {
+    key: gameKey,
     maxPlayers: 3,
     players: [null, null, null],
     gameState: null
@@ -107,21 +108,23 @@ io.sockets.on('connection', function(socket){
   let game = nextAvailableGame() || initializeGame();
 
   if (game) {
+    let key = game.key;
+
     if (emptyLobby(game)) {
       let nextSeat = nextAvailableSeat(game);
       console.log(`${socket.id}: Joined the game.`);
       console.log(`${socket.id}: Starting the game.`);
       console.log(`${socket.id}: Sitting in seat ${nextSeat}.`);
 
-      games["ABCD"].players[nextSeat] = newPlayer({playerNumber: nextSeat, id: socket.id});
+      games[key].players[nextSeat] = newPlayer({playerNumber: nextSeat, id: socket.id});
 
       io.to(socket.id).emit('startGame', {
-          gameKey: "ABCD",
-          numPlayers: games["ABCD"].maxPlayers,
+          gameKey: key,
+          numPlayers: games[key].maxPlayers,
           player: nextSeat
       });
 
-      io.to("ABCD").emit('loadProfiles', { profiles: games["ABCD"].players });
+      io.to(key).emit('loadProfiles', { profiles: games[key].players });
     } else {
       let nextSeat = nextAvailableSeat(game);
       console.log(`${socket.id}: Joined the game.`);
@@ -129,14 +132,15 @@ io.sockets.on('connection', function(socket){
       if (nextSeat !== null) {
         console.log(`${socket.id}: Sitting in seat ${nextSeat}.`);
 
-        games["ABCD"].players[nextSeat] = newPlayer({playerNumber: nextSeat, id: socket.id});
+        games[key].players[nextSeat] = newPlayer({playerNumber: nextSeat, id: socket.id});
 
         io.to(socket.id).emit('loadGame', {
+            gameKey: key,
             state: games["ABCD"].gameState,
             player: nextSeat
         });
 
-        io.to("ABCD").emit('loadProfiles', { profiles: games["ABCD"].players });
+        io.to(key).emit('loadProfiles', { profiles: games[key].players });
       } else {
         console.log(`${socket.id}: Game full.`);
       }
@@ -149,7 +153,10 @@ io.sockets.on('connection', function(socket){
       console.log(`${socket.id}: Set game state for game ${data.gameKey}`);
       let key = data.gameKey;
       games[key].gameState = data.state;
-      socket.broadcast.emit('loadGame', { state: games[key].gameState });
+      socket.broadcast.emit('loadGame', {
+        gameKey: key,
+        state: games[key].gameState
+      });
   })
 
   //Listen for this client to disconnect
