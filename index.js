@@ -124,7 +124,7 @@ io.sockets.on('connection', function(socket){
           player: nextSeat
       });
 
-      io.to(key).emit('loadProfiles', { profiles: games[key].players });
+      io.emit('loadProfiles', { profiles: games[key].players });
     } else {
       let nextSeat = nextAvailableSeat(game);
       console.log(`${socket.id}: Joined the game.`);
@@ -140,7 +140,7 @@ io.sockets.on('connection', function(socket){
             player: nextSeat
         });
 
-        io.to(key).emit('loadProfiles', { profiles: games[key].players });
+        io.emit('loadProfiles', { profiles: games[key].players });
       } else {
         console.log(`${socket.id}: Game full.`);
       }
