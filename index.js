@@ -162,6 +162,7 @@ io.sockets.on('connection', function(socket){
   //Listen for this client to disconnect
   socket.on('disconnect', function() {
       console.log(`${socket.id}: Left the game.`);
+      // TODO: Find game that the disconnected player belonged to before you boot them. Maybe loop through all games?
       let playerNumber = games["ABCD"].players.findIndex((player) => (player && (socket.id === player.id)));
       games["ABCD"].players[playerNumber] = null;
 
