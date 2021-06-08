@@ -21,7 +21,7 @@ function initializeGame() {
     gameState: null
   }
 
-  console.log("Initialized game ABCD");
+  console.log(`Initialized game: ${gameKey}`);
 
   return games[gameKey];
 }
@@ -136,7 +136,7 @@ io.sockets.on('connection', function(socket){
 
         io.to(socket.id).emit('loadGame', {
             gameKey: key,
-            state: games["ABCD"].gameState,
+            state: games[key].gameState,
             player: nextSeat
         });
 
