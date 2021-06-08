@@ -106,7 +106,7 @@ io.sockets.on('connection', function(socket){
 
         io.to(socket.id).emit('loadGame', {
             state: games["ABCD"].gameState,
-            player: nextSeatx
+            player: nextSeat
         });
 
         console.log()
