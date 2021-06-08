@@ -10,15 +10,41 @@ let games = {};
 let maxPlayers, players, gameState;
 
 function initializeGame() {
-  let gameKey = "ABCD"
+  let gameKey = "ABCD";
+
+  if (!gameKey) { return null; }
+
   games[gameKey] = {
     maxPlayers: 3,
     players: [null, null, null],
     gameState: null
   }
+
+  console.log("Initialized game ABCD");
+
+  return games[gameKey];
 }
 
-initializeGame();
+function newGameKey(retries) {
+  let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  retries = retries || 0;
+
+  let key = [sample(letters), sample(letters), sample(letters), sample(letters)].join("")
+
+  if (!games[key]) {
+    return key;
+  } else if (retries < 3) {
+    return newGameKey(retries + 1);
+  } else {
+    return null;
+  }
+}
+
+function sample(array) {
+    const randomIndex = Math.floor(Math.random() * array.length);
+
+    return array[randomIndex];
+}
 
 // ---------------------
 // Web stuff
@@ -78,7 +104,7 @@ function newPlayer(props) {
 }
 
 io.sockets.on('connection', function(socket){
-  let game = nextAvailableGame();
+  let game = nextAvailableGame() || initializeGame();
 
   if (game) {
     if (emptyLobby(game)) {
@@ -109,7 +135,6 @@ io.sockets.on('connection', function(socket){
             player: nextSeat
         });
 
-        console.log()
         io.to("ABCD").emit('loadProfiles', { profiles: games["ABCD"].players });
       } else {
         console.log(`${socket.id}: Game full.`);
@@ -131,5 +156,10 @@ io.sockets.on('connection', function(socket){
       games["ABCD"].players[playerNumber] = null;
 
       io.to("ABCD").emit('loadProfiles', { profiles: games["ABCD"].players });
+
+      if (emptyLobby(games["ABCD"])) {
+        console.log("Game ABCD empty. Clearing game");
+        delete games["ABCD"];
+      }
   });
 })
