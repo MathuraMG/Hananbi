@@ -116,6 +116,7 @@ io.sockets.on('connection', function(socket){
       games["ABCD"].players[nextSeat] = newPlayer({playerNumber: nextSeat, id: socket.id});
 
       io.to(socket.id).emit('startGame', {
+          gameKey: "ABCD",
           numPlayers: games["ABCD"].maxPlayers,
           player: nextSeat
       });
@@ -145,8 +146,10 @@ io.sockets.on('connection', function(socket){
   }
 
   socket.on('setGameState', function(data) {
-      games["ABCD"].gameState = data.state;
-      socket.to("ABCD").broadcast.emit('loadGame', { state: games["ABCD"].gameState });
+      console.log(`${socket.id}: Set game state for game ${data.gameKey}`);
+      let key = data.gameKey;
+      games[key].gameState = data.state;
+      socket.broadcast.emit('loadGame', { state: games[key].gameState });
   })
 
   //Listen for this client to disconnect

@@ -1,5 +1,6 @@
 let socket = io();
 let myGame;
+let gameKey;
 let currentPlayer;
 let playerProfiles = {};
 
@@ -31,6 +32,7 @@ socket.on('loadProfiles', (data) => {
 
 function startGame(data) {
     if (myGame) {
+        gameKey = data.gameKey;
         myGame.update();
     } else {
         setTimeout((() => startGame(data)), 1000);
@@ -39,6 +41,7 @@ function startGame(data) {
 
 function loadGame(data) {
     if (myGame) {
+        gameKey = data.gameKey;
         myGame.setState(data.state);
         myGame.display({currentPlayer});
     } else {

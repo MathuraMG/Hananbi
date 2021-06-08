@@ -60,7 +60,12 @@ class Game {
 
     update() {
       this.checkEndGame();
-      socket.emit('setGameState', {state: this.state()});
+
+      socket.emit('setGameState', {
+        gameKey: gameKey,
+        state: this.state()
+      });
+
       this.display({currentPlayer});
     }
 
