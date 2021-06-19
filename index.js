@@ -56,6 +56,10 @@ app.get('/reset', function(req, res) {
   res.send('Game reset');
 });
 
+app.get('/debug', function(req, res) {
+  res.send(JSON.stringify(games));
+});
+
 app.use('/', express.static('public'));
 
 //Initialize the actual HTTP server
