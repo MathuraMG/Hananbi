@@ -166,15 +166,25 @@ io.sockets.on('connection', function(socket){
   //Listen for this client to disconnect
   socket.on('disconnect', function() {
       console.log(`${socket.id}: Left the game.`);
-      // TODO: Find game that the disconnected player belonged to before you boot them. Maybe loop through all games?
-      let playerNumber = games["ABCD"].players.findIndex((player) => (player && (socket.id === player.id)));
-      games["ABCD"].players[playerNumber] = null;
 
-      io.to("ABCD").emit('loadProfiles', { profiles: games["ABCD"].players });
+      let departingGame;
 
-      if (emptyLobby(games["ABCD"])) {
-        console.log("Game ABCD empty. Clearing game");
-        delete games["ABCD"];
+      for(const key in games) {
+        let game = games[key]
+        let playerNumber = game.players.findIndex((player) => (player && (socket.id === player.id)));
+
+        if (playerNumber >= 0) {
+          departingGame = game;
+          departingGame.players[playerNumber] = null;
+          break;
+        }
+      }
+
+      io.to(departingGame.key).emit('loadProfiles', { profiles: departingGame.players });
+
+      if (emptyLobby(game)) {
+        console.log(`Game ${departingGame.key} empty. Clearing game`);
+        delete games[departingGame.key];
       }
   });
 })
